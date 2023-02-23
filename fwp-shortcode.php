@@ -4,7 +4,7 @@
  * Plugin Name: FORTE-WP Shortcode
  * Plugin URI: https://www.forte.nl
  * Description: Defines some demo's of shortcodes
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: FORTE web publishing
  * Author URI: https://www.forte.nl
  * Text Domain: fwp
@@ -18,12 +18,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Simple shortcode callback
+ * @return string
+ */
 function fwp_hello() {
 	return 'Hello guys!';
 }
 
 add_shortcode( 'hello', 'fwp_hello' );
 
+/**
+ * Shortcode callback for share post on facebook without cookies
+ * @return string
+ */
 function fwp_facebook() {
 	$link  = get_permalink();
 	$text  = '<a href="https://www.facebook.com/sharer/sharer.php?u=';
@@ -35,6 +43,11 @@ function fwp_facebook() {
 
 add_shortcode( 'fb', 'fwp_facebook' );
 
+/**
+ * Shortcode callback for displaying selected post titles and excerpts
+ * @param array $atts
+ * @return string
+ */
 function fwp_show_post( $atts ) {
 
 	$atts = shortcode_atts(
@@ -46,6 +59,7 @@ function fwp_show_post( $atts ) {
 		$atts
 	);
 
+	// Start output buffering.
 	ob_start();
 
 	$show_post = get_post( absint( $atts['id'] ) );
@@ -65,12 +79,19 @@ function fwp_show_post( $atts ) {
 		echo '</div>';
 	}
 
+	// Return buffered output
 	return ob_get_clean();
 }
 
 add_shortcode( 'show-post', 'fwp_show_post' );
 
-function val_exchange( $atts ) {
+/**
+ * Shortcode callback for displaying most recent exchange rate for any valuta to
+ * the euro
+ * @param array $atts
+ * @return string
+ */
+function fwp_exchange( $atts ) {
 
 	$atts = shortcode_atts(
 		array(
@@ -85,8 +106,8 @@ function val_exchange( $atts ) {
 	$uri    = 'http://www.floatrates.com/daily/eur.json';
 	$remote = wp_remote_get( $uri );
 	if ( $remote ) {
+		// print_r( $remote );
 		$rates = json_decode( wp_remote_retrieve_body( $remote ) );
-		// print_r($rates);
 		$rate_eur = floatval( $rates->$val->inverseRate );
 		$rate_eur = number_format_i18n( $rate_eur, 3 );
 		$date     = wp_date( 'd M Y, H:i', strtotime( $rates->$val->date ) );
@@ -96,8 +117,13 @@ function val_exchange( $atts ) {
 	return ob_get_clean();
 }
 
-add_shortcode( 'exchange', 'val_exchange' );
+add_shortcode( 'exchange', 'fwp_exchange' );
 
+/**
+ * Simple demontration for form handling in a ahortcode. This shortcode makes
+ * use of aditional data handling functions 
+ * @return string
+ */
 function fwp_form_generator() {
 
 	ob_start();
@@ -151,11 +177,18 @@ function fwp_form_generator() {
 
 add_shortcode( 'form', 'fwp_form_generator' );
 
+/**
+ * Database simulation by transient
+ * @return array
+ */
 function fwp_get_database() {
 	$database = ( get_transient( 'fwp_database' ) ) ? get_transient( 'fwp_database' ) : array();
 	return $database;
 }
-
+/**
+ * Adds row to simulated database and sorts on name
+ * @param array $row
+ */
 function fwp_add_to_database( $row ) {
 	$database   = fwp_get_database();
 	$database[] = $row;
