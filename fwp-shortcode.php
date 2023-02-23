@@ -1,10 +1,9 @@
 <?php
-
 /**
  * Plugin Name: FORTE-WP Shortcode
  * Plugin URI: https://www.forte.nl
  * Description: Defines some demo's of shortcodes
- * Version: 1.0.2
+ * Version: 1.1.0
  * Author: FORTE web publishing
  * Author URI: https://www.forte.nl
  * Text Domain: fwp
@@ -20,6 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Simple shortcode callback
+ *
  * @return string
  */
 function fwp_hello() {
@@ -30,6 +30,7 @@ add_shortcode( 'hello', 'fwp_hello' );
 
 /**
  * Shortcode callback for share post on facebook without cookies
+ *
  * @return string
  */
 function fwp_facebook() {
@@ -45,7 +46,8 @@ add_shortcode( 'fb', 'fwp_facebook' );
 
 /**
  * Shortcode callback for displaying selected post titles and excerpts
- * @param array $atts
+ *
+ * @param array $atts Attributes for shortcode.
  * @return string
  */
 function fwp_show_post( $atts ) {
@@ -88,7 +90,8 @@ add_shortcode( 'show-post', 'fwp_show_post' );
 /**
  * Shortcode callback for displaying most recent exchange rate for any valuta to
  * the Euro
- * @param array $atts
+ *
+ * @param array $atts Attributes for shortcode.
  * @return string
  */
 function fwp_exchange( $atts ) {
@@ -107,7 +110,7 @@ function fwp_exchange( $atts ) {
 	$remote = wp_remote_get( $uri );
 	if ( $remote ) {
 		// print_r( $remote ); // for debugging. Disabled.
-		$rates = json_decode( wp_remote_retrieve_body( $remote ) );
+		$rates    = json_decode( wp_remote_retrieve_body( $remote ) );
 		$rate_eur = floatval( $rates->$val->inverseRate );
 		$rate_eur = number_format_i18n( $rate_eur, 3 );
 		$date     = wp_date( 'd M Y, H:i', strtotime( $rates->$val->date ) );
@@ -121,7 +124,8 @@ add_shortcode( 'exchange', 'fwp_exchange' );
 
 /**
  * Simple demontration for form handling in a ahortcode. This shortcode makes
- * use of aditional data handling functions 
+ * use of aditional data handling functions
+ *
  * @return string
  */
 function fwp_form_generator() {
@@ -185,6 +189,7 @@ add_shortcode( 'form', 'fwp_form_generator' );
 
 /**
  * Database simulation by transient
+ *
  * @return array
  */
 function fwp_get_database() {
@@ -193,7 +198,8 @@ function fwp_get_database() {
 }
 /**
  * Adds row to simulated database and sorts on name
- * @param array $row
+ *
+ * @param array $row array of 'voornaam', 'achternaam' and 'woonplaats'.
  */
 function fwp_add_to_database( $row ) {
 	$database   = fwp_get_database();
