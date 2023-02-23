@@ -4,7 +4,7 @@
  * Plugin Name: FORTE-WP Shortcode
  * Plugin URI: https://www.forte.nl
  * Description: Defines some demo's of shortcodes
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: FORTE web publishing
  * Author URI: https://www.forte.nl
  * Text Domain: fwp
@@ -79,7 +79,7 @@ function fwp_show_post( $atts ) {
 		echo '</div>';
 	}
 
-	// Return buffered output
+	// Return buffered output.
 	return ob_get_clean();
 }
 
@@ -87,7 +87,7 @@ add_shortcode( 'show-post', 'fwp_show_post' );
 
 /**
  * Shortcode callback for displaying most recent exchange rate for any valuta to
- * the euro
+ * the Euro
  * @param array $atts
  * @return string
  */
@@ -106,7 +106,7 @@ function fwp_exchange( $atts ) {
 	$uri    = 'http://www.floatrates.com/daily/eur.json';
 	$remote = wp_remote_get( $uri );
 	if ( $remote ) {
-		// print_r( $remote );
+		// print_r( $remote ); // for debugging. Disabled.
 		$rates = json_decode( wp_remote_retrieve_body( $remote ) );
 		$rate_eur = floatval( $rates->$val->inverseRate );
 		$rate_eur = number_format_i18n( $rate_eur, 3 );
@@ -128,25 +128,30 @@ function fwp_form_generator() {
 
 	ob_start();
 
-	// delete_transient( 'fwp_database' );
+	// delete_transient( 'fwp_database' ); // Used to reset database. Disabled.
 
+	// check on user rights.
 	if ( current_user_can( 'administrator' ) ) {
 
+		// check if all form fields are provided and nonce is validated.
 		if ( isset( $_POST['_wpnonce'] ) &&
 				isset( $_POST['voornaam'] ) &&
 				isset( $_POST['achternaam'] ) &&
 				isset( $_POST['woonplaats'] ) &&
 				wp_verify_nonce( $_POST['_wpnonce'], 'fwp_add_member' ) ) {
 
+			// sanitize form fields and vreate row for addition to database.
 			$row = array(
 				'voornaam'   => sanitize_text_field( wp_unslash( $_POST['voornaam'] ) ),
 				'achternaam' => sanitize_text_field( wp_unslash( $_POST['achternaam'] ) ),
 				'woonplaats' => sanitize_text_field( wp_unslash( $_POST['woonplaats'] ) ),
 			);
 
+			// add row to database in separate function / data layer.
 			fwp_add_to_database( $row );
 		}
 
+		// echo all empty form fields.
 		echo '<div><form method="POST" style="display:flex; flex-direction:row; gap:10px;">';
 		wp_nonce_field( 'fwp_add_member' );
 		echo '<div><input type="text" name="voornaam" placeholder="Voornaam" /></div>';
@@ -156,6 +161,7 @@ function fwp_form_generator() {
 		echo '</form></div>';
 	}
 
+	// echo all database rows in user is logged in.
 	if ( is_user_logged_in() ) {
 		$database = fwp_get_database();
 
