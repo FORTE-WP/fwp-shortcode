@@ -3,7 +3,7 @@
  * Plugin Name: FORTE-WP Shortcode
  * Plugin URI: https://www.forte.nl
  * Description: Defines some demo's of shortcodes
- * Version: 1.1.0
+ * Version: 1.1.1
  * Author: FORTE web publishing
  * Author URI: https://www.forte.nl
  * Text Domain: fwp
@@ -165,7 +165,7 @@ function fwp_form_generator() {
 		echo '</form></div>';
 	}
 
-	// echo all database rows in user is logged in.
+	// echo all database rows if user is logged in.
 	if ( is_user_logged_in() ) {
 		$database = fwp_get_database();
 
@@ -188,7 +188,7 @@ function fwp_form_generator() {
 add_shortcode( 'form', 'fwp_form_generator' );
 
 /**
- * Database simulation by transient
+ * Database simulation with transient
  *
  * @return array
  */
