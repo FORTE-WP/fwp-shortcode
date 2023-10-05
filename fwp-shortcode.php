@@ -52,7 +52,7 @@ add_shortcode( 'fb', 'fwp_facebook' );
  */
 function fwp_show_post( $atts ) {
 
-	$atts = shortcode_atts(
+	$atts = shortcode_atts( // allowed attributes.
 		array(
 			'id'         => 0,
 			'color'      => 'black',
@@ -163,6 +163,9 @@ function fwp_form_generator() {
 		echo '<div><input type="text" name="woonplaats" placeholder="Woonplaats" /></div>';
 		echo '<div><input type="submit" value="Toevoegen" /></div>';
 		echo '</form></div>';
+
+		// disable refresh with reposting values
+		echo '<script>if( window.history.replaceState ) {window.history.replaceState( null, null, window.location.href );}</script>';
 	}
 
 	// echo all database rows if user is logged in.
