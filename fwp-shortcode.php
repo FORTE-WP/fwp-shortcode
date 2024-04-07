@@ -3,7 +3,7 @@
  * Plugin Name: FORTE-WP Shortcode
  * Plugin URI: https://www.forte.nl
  * Description: Defines some demo's of shortcodes
- * Version: 1.1.1
+ * Version: 1.1.2
  * Author: FORTE web publishing
  * Author URI: https://www.forte.nl
  * Text Domain: fwp
@@ -67,18 +67,20 @@ function fwp_show_post( $atts ) {
 	$show_post = get_post( absint( $atts['id'] ) );
 	if ( $show_post ) {
 		$title   = get_the_title( $show_post );
-		$perma   = get_permalink( $show_post );
+		$link   = get_permalink( $show_post );
 		$excerpt = wp_trim_excerpt( '', $show_post );
 
-		$link  = '<a style="color:' . esc_attr( $atts['color'] );
-		$link .= '" href="' . esc_url( $perma ) . ';">';
-
-		echo '<div style="padding:0 10px 10px 10px;';
-		echo 'color:' . esc_html( $atts['color'] ) . ';';
-		echo 'background-color:' . esc_html( $atts['background'] ) . ';">';
-		echo '<h4>' . $link . esc_html( $title ) . '</a></h4>';
-		echo '<div>' . esc_html( $excerpt ) . ' ... ' . $link . 'Lees verder</a></div>';
-		echo '</div>';
+		?>
+        <style>
+            #show-post-<?php echo esc_attr( $atts['id'] ) ?> { color: <?php echo esc_attr( $atts['color'] ) ?>; background: <?php echo esc_attr( $atts['background'] ) ?> ;padding: 0 10px 10px 10px; }
+            #show-post-<?php echo esc_attr( $atts['id'] ) ?>:hover { background-color: gray }
+            #show-post-<?php echo esc_attr( $atts['id'] ) ?> a {color: <?php echo esc_attr( $atts['color'] ) ?> }
+            </style>
+		<div id = "show-post-<?php echo $atts['id'] ?>">
+		<h3><a href="<?php echo esc_url( $link ) ?>" ><?php echo esc_html( $title ); ?></a></h3>
+		<div><?php echo esc_html( $excerpt ) ?>...<a href="<?php echo esc_url( $link ) ?>">Lees verder</a></div>
+		</div>
+		<?php
 	}
 
 	// Return buffered output.
