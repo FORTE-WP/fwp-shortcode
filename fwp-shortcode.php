@@ -3,7 +3,7 @@
  * Plugin Name: FORTE-WP Shortcode
  * Plugin URI: https://www.forte.nl
  * Description: Defines some demo's of shortcodes
- * Version: 1.1.3
+ * Version: 1.1.4
  * Author: FORTE web publishing
  * Author URI: https://www.forte.nl
  * Text Domain: fwp
@@ -34,7 +34,8 @@ add_shortcode( 'hello', 'fwp_hello' );
  * @return string
  */
 function fwp_facebook() {
-	$link  = get_permalink();
+    global $post;
+	$link  = get_permalink( $post );
 	$text  = '<a href="https://www.facebook.com/sharer/sharer.php?u=';
 	$text .= esc_url( $link ) . '" target="_blank">';
 	$text .= 'Share on facebook';
