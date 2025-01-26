@@ -3,7 +3,7 @@
  * Plugin Name: FORTE-WP Shortcode
  * Plugin URI: https://www.forte.nl
  * Description: Defines some demo's of shortcodes
- * Version: 1.1.5
+ * Version: 1.1.6
  * Author: FORTE web publishing
  * Author URI: https://www.forte.nl
  * Text Domain: fwp
